@@ -20,6 +20,12 @@ class AuthController {
 
     res.status(StatusCodes.OK).json(access);
   }
+
+  async user(req, res) {
+    const userDetail = await this.authService.getUserDetail(req?.user?.id);
+
+    res.status(StatusCodes.OK).json(userDetail);
+  }
 }
 
 module.exports = AuthController;

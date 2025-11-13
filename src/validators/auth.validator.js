@@ -1,4 +1,4 @@
-const { body } = require("express-validator");
+const { body, header } = require("express-validator");
 const { generateValidator } = require("./base.validator");
 
 class AuthSchema {
@@ -48,6 +48,10 @@ class AuthSchema {
         .isString()
         .withMessage("Password should be string"),
     ]);
+  }
+
+  static get user() {
+    return generateValidator([]);
   }
 }
 

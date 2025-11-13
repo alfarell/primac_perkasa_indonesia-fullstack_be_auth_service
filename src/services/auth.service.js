@@ -27,6 +27,11 @@ class AuthService {
     return user;
   }
 
+  _getUserById(userId) {
+    const user = this.users.find((user) => user.id === userId);
+    return user;
+  }
+
   async _validateCredential(credential, encrypted) {
     const isMatch = await bcrypt.compare(credential, encrypted);
     if (!isMatch) {
@@ -103,6 +108,30 @@ class AuthService {
     };
 
     return access;
+  }
+
+  async getUserDetail(userId) {
+    if (!userId) {
+      throw ErrorBuilder.build({
+        code: StatusCodes.BAD_REQUEST,
+        type: "user_detail",
+        msg: "User id is not defined",
+      });
+    }
+
+    const user = this._getUserById(userId);
+
+    if (!user) {
+      throw ErrorBuilder.build({
+        code: StatusCodes.BAD_REQUEST,
+        type: "user_detail",
+        msg: "User profile not found",
+      });
+    }
+
+    delete user.password;
+
+    return user;
   }
 }
 
