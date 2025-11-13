@@ -71,6 +71,7 @@ class AuthService {
       id: uuid(),
       email: payload.email,
       username: payload.username,
+      name: payload.name,
       password: hashedPassword,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
