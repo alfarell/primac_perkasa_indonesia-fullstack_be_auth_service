@@ -5,7 +5,7 @@ class AuthController {
     this.authService = authService;
   }
 
-  async register(req, res, next) {
+  async register(req, res) {
     const body = req.body;
 
     const userId = await this.authService.createUser(body);

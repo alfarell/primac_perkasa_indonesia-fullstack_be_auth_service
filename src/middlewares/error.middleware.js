@@ -1,6 +1,6 @@
-const { StatusCodes, ReasonPhrases } = require("http-status-codes");
+const { StatusCodes } = require("http-status-codes");
 
-const ErrorHandler = (err, req, res, next) => {
+const ErrorHandler = (err, _, res, next) => {
   if (!err) next();
 
   const error = {
