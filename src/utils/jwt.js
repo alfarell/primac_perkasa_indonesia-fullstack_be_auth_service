@@ -5,4 +5,8 @@ function generateToken(payload) {
   return jwt.sign(payload, env.jwtSecret, { expiresIn: env.jwtExpiresIn });
 }
 
-module.exports = { generateToken };
+function verifyToken(token) {
+  return jwt.verify(token, env.jwtSecret);
+}
+
+module.exports = { generateToken, verifyToken };
