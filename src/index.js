@@ -1,12 +1,10 @@
 const express = require("express");
 const morgan = require("morgan");
-const dotenv = require("dotenv");
+const config = require("./config");
 const router = require("./routes");
 const middlewares = require("./middlewares");
 
-dotenv.config();
-
-const PORT = process.env.PORT || 3000;
+const PORT = config.env.port;
 
 const app = express();
 
