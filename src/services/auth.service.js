@@ -133,9 +133,16 @@ class AuthService {
       });
     }
 
-    delete user.password;
+    const userData = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      username: user.username,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    };
 
-    return user;
+    return userData;
   }
 }
 
