@@ -104,7 +104,10 @@ class AuthService {
 
     const access = {
       accessToken,
-      expiredIn: env.jwtExpiresIn,
+      expiredIn: new Date(
+        new Date().getTime() + env.jwtExpiresIn
+      ).toISOString(),
+      duration: env.jwtExpiresIn,
       user: userPayload,
     };
 
