@@ -2,6 +2,8 @@ const uuid = require("uuid").v4;
 const bcrypt = require("bcrypt");
 const { env } = require("../config");
 const { generateToken } = require("../utils/jwt");
+const ErrorBuilder = require("../utils/error-builder");
+const { StatusCodes } = require("http-status-codes");
 
 class AuthService {
   constructor() {
@@ -28,19 +30,31 @@ class AuthService {
   async _validateCredential(credential, encrypted) {
     const isMatch = await bcrypt.compare(credential, encrypted);
     if (!isMatch) {
-      throw new Error("Pasword is incorrect");
+      throw ErrorBuilder.build({
+        code: StatusCodes.BAD_REQUEST,
+        type: "credential",
+        msg: "Pasword is incorrect",
+      });
     }
   }
 
   async createUser(payload) {
     const isEmailRegistered = this._checkExistingEmail(payload.email);
     if (isEmailRegistered) {
-      throw new Error("Email is registered");
+      throw ErrorBuilder.build({
+        code: StatusCodes.BAD_REQUEST,
+        type: "credential",
+        msg: "Email is registered",
+      });
     }
 
     const isUsernameTaken = this._checkExistingUsername(payload.username);
     if (isUsernameTaken) {
-      throw new Error("Username is already taken");
+      throw ErrorBuilder.build({
+        code: StatusCodes.BAD_REQUEST,
+        type: "credential",
+        msg: "Username is already taken",
+      });
     }
 
     const hashedPassword = await bcrypt.hash(
@@ -65,9 +79,11 @@ class AuthService {
   async login(credential) {
     const user = this._getUserByUsername(credential.username);
     if (!user || !user?.username) {
-      throw new Error(
-        `User with username: ${credential.username} does not exist`
-      );
+      throw ErrorBuilder.build({
+        code: StatusCodes.BAD_REQUEST,
+        type: "credential",
+        msg: `User with username: ${credential.username} does not exist`,
+      });
     }
 
     await this._validateCredential(credential.password, user.password);
