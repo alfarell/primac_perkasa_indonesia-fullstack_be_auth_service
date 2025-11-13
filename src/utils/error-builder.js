@@ -1,4 +1,4 @@
-class ErrorBuilder {
+class HttpError {
   static build({ msg, type, code } = {}) {
     const error = new Error(msg, {
       cause: {
@@ -11,4 +11,4 @@ class ErrorBuilder {
   }
 }
 
-module.exports = ErrorBuilder;
+module.exports = HttpError;

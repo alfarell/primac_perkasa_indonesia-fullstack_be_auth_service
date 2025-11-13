@@ -2,7 +2,7 @@ const uuid = require("uuid").v4;
 const bcrypt = require("bcrypt");
 const { env } = require("../config");
 const { generateToken } = require("../utils/jwt");
-const ErrorBuilder = require("../utils/error-builder");
+const HttpError = require("../utils/error-builder");
 const { StatusCodes } = require("http-status-codes");
 
 class AuthService {
@@ -35,7 +35,7 @@ class AuthService {
   async _validateCredential(credential, encrypted) {
     const isMatch = await bcrypt.compare(credential, encrypted);
     if (!isMatch) {
-      throw ErrorBuilder.build({
+      throw HttpError.build({
         code: StatusCodes.BAD_REQUEST,
         type: "credential",
         msg: "Pasword is incorrect",
@@ -46,7 +46,7 @@ class AuthService {
   async createUser(payload) {
     const isEmailRegistered = this._checkExistingEmail(payload.email);
     if (isEmailRegistered) {
-      throw ErrorBuilder.build({
+      throw HttpError.build({
         code: StatusCodes.BAD_REQUEST,
         type: "credential",
         msg: "Email is already registered",
@@ -55,7 +55,7 @@ class AuthService {
 
     const isUsernameTaken = this._checkExistingUsername(payload.username);
     if (isUsernameTaken) {
-      throw ErrorBuilder.build({
+      throw HttpError.build({
         code: StatusCodes.BAD_REQUEST,
         type: "credential",
         msg: "Username is already taken",
@@ -85,7 +85,7 @@ class AuthService {
   async login(credential) {
     const user = this._getUserByUsername(credential.username);
     if (!user || !user?.username) {
-      throw ErrorBuilder.build({
+      throw HttpError.build({
         code: StatusCodes.BAD_REQUEST,
         type: "credential",
         msg: `User with username: ${credential.username} does not exist`,
@@ -113,7 +113,7 @@ class AuthService {
 
   async getUserDetail(userId) {
     if (!userId) {
-      throw ErrorBuilder.build({
+      throw HttpError.build({
         code: StatusCodes.BAD_REQUEST,
         type: "user_detail",
         msg: "User id is not defined",
@@ -123,7 +123,7 @@ class AuthService {
     const user = this._getUserById(userId);
 
     if (!user) {
-      throw ErrorBuilder.build({
+      throw HttpError.build({
         code: StatusCodes.BAD_REQUEST,
         type: "user_detail",
         msg: "User profile not found",

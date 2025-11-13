@@ -11,7 +11,7 @@ const app = express();
 app.use(express.json());
 app.use(morgan("common"));
 app.use("/api", router);
-app.use(middlewares.ErrorHandler);
+app.use(middlewares.HttpErrorHandler);
 app.use(middlewares.NotFound);
 
 app.listen(PORT, () => {

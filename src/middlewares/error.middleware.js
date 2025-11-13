@@ -1,6 +1,6 @@
 const { StatusCodes } = require("http-status-codes");
 
-const ErrorHandler = (err, _, res, next) => {
+const HttpErrorHandler = (err, _, res, next) => {
   if (!err) next();
 
   const error = {
@@ -12,4 +12,4 @@ const ErrorHandler = (err, _, res, next) => {
     .json({ error });
 };
 
-module.exports = ErrorHandler;
+module.exports = HttpErrorHandler;
