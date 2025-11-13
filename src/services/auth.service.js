@@ -49,7 +49,7 @@ class AuthService {
       throw ErrorBuilder.build({
         code: StatusCodes.BAD_REQUEST,
         type: "credential",
-        msg: "Email is registered",
+        msg: "Email is already registered",
       });
     }
 
