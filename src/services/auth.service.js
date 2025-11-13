@@ -1,6 +1,7 @@
 const uuid = require("uuid").v4;
 const bcrypt = require("bcrypt");
 const { env } = require("../config");
+const { generateToken } = require("../utils/jwt");
 
 class AuthService {
   constructor() {
@@ -17,6 +18,18 @@ class AuthService {
       (user) => user.username === username
     );
     return findIndex >= 0;
+  }
+
+  _getUserByUsername(username) {
+    const user = this.users.find((user) => user.username === username);
+    return user;
+  }
+
+  async _validateCredential(credential, encrypted) {
+    const isMatch = await bcrypt.compare(credential, encrypted);
+    if (!isMatch) {
+      throw new Error("Pasword is incorrect");
+    }
   }
 
   async createUser(payload) {
@@ -47,6 +60,33 @@ class AuthService {
     this.users.push(newUser);
 
     return newUser.id;
+  }
+
+  async login(credential) {
+    const user = this._getUserByUsername(credential.username);
+    if (!user || !user?.username) {
+      throw new Error(
+        `User with username: ${credential.username} does not exist`
+      );
+    }
+
+    await this._validateCredential(credential.password, user.password);
+
+    const userPayload = {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+    };
+
+    const accessToken = generateToken(userPayload);
+
+    const access = {
+      accessToken,
+      expiredIn: env.jwtExpiresIn,
+      user: userPayload,
+    };
+
+    return access;
   }
 }
 

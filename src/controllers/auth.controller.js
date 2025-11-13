@@ -21,6 +21,23 @@ class AuthController {
       });
     }
   }
+
+  async login(req, res) {
+    const body = req.body;
+
+    try {
+      const access = await this.authService.login(body);
+
+      res.status(StatusCodes.OK).json(access);
+    } catch (error) {
+      res.status(StatusCodes.BAD_REQUEST).json({
+        error: {
+          type: "credential",
+          msg: error.message,
+        },
+      });
+    }
+  }
 }
 
 module.exports = AuthController;

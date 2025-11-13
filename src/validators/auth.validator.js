@@ -32,6 +32,23 @@ class AuthSchema {
         .withMessage("Username is required"),
     ]);
   }
+
+  static get login() {
+    return generateValidator([
+      body("username")
+        .notEmpty()
+        .withMessage("Username is required")
+        .isString()
+        .withMessage("Username should be string")
+        .isLength({ min: 6 })
+        .withMessage("Username should not less than 6 character"),
+      body("password")
+        .notEmpty()
+        .withMessage("Password is required")
+        .isString()
+        .withMessage("Password should be string"),
+    ]);
+  }
 }
 
 module.exports = AuthSchema;

@@ -13,5 +13,10 @@ router.post(
   AuthValidator.register,
   authController.register.bind(authController)
 );
+router.post(
+  "/login",
+  AuthValidator.login,
+  authController.login.bind(authController)
+);
 
 module.exports = router;
