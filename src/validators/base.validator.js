@@ -6,7 +6,7 @@ const generateValidator = (validators) => async (req, res, next) => {
     if (!result.isEmpty()) {
       return res
         .status(StatusCodes.BAD_REQUEST)
-        .json({ errors: result.mapped() });
+        .json({ error: Object.values(result.mapped()).at(0) });
     }
   }
 
